@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Para ti, mi amor ❤️</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+    body {
+      margin: 0;
+      height: 100vh;
+      background: black;
+      overflow: hidden;
+      font-family: 'Pacifico', cursive;
+      color: #ff00ff;
+    }
+
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+    }
+
+    .heartbeat-container {
+      position: relative;
+      z-index: 1;
+      width: 90vw;
+      max-width: 400px;
+      height: auto;
+      aspect-ratio: 1 / 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: auto;
+      animation: heartbeat 2s infinite;
+    }
+
+    .heart-image {
+      width: 100%;
+      height: auto;
+      position: relative;
+    }
+
+    .heart-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .heart-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      text-align: center;
+      font-size: 4vw;
+      padding: 0 5vw;
+      text-shadow: 0 0 8px #ff69b4;
+      line-height: 1.2;
+      user-select: none;
+    }
+
+    @keyframes heartbeat {
+      0%, 100% {
+        transform: scale(1);
+      }
+      25% {
+        transform: scale(1.05);
+      }
+      50% {
+        transform: scale(0.98);
+      }
+      75% {
+        transform: scale(1.02);
+      }
+    }
+
+    .heart {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: red;
+      transform: rotate(45deg);
+      opacity: 1;
+      animation: grow-fade 2s ease-out forwards;
+      z-index: 1;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: red;
+      border-radius: 50%;
+    }
+
+    .heart::before {
+      top: -10px;
+      left: 0;
+    }
+
+    .heart::after {
+      left: -10px;
+      top: 0;
+    }
+
+    @keyframes grow-fade {
+      0% {
+        transform: scale(1) rotate(45deg);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(4) rotate(45deg);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body onclick="crearCorazon(event)">
+  <canvas id="matrix"></canvas>
+
+  <div class="heartbeat-container">
+    <div class="heart-image">
+      <img src="corazon.png" alt="corazon" />
+      <div class="heart-text">
+        Feliz Mes #30 Amor<br />
+        Te Amo Mucho
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById("matrix");
+    const ctx = canvas.getContext("2d");
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    const columns = Math.floor(canvas.width / 80);
+    const drops = new Array(columns).fill(1);
+
+    function drawMatrix() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = "#ff00ff";
+      ctx.font = "20px monospace";
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = "Te Amo";
+        ctx.fillText(text, i * 80, drops[i] * 20);
+
+        if (drops[i] * 20 > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+    }
+
+    setInterval(drawMatrix, 50);
+
+    function crearCorazon(e) {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.style.left = `${e.clientX - 10}px`;
+      heart.style.top = `${e.clientY - 10}px`;
+      document.body.appendChild(heart);
+
+      setTimeout(() => {
+        heart.remove();
+      }, 2000);
+    }
+  </script>
+</body>
+</html>
